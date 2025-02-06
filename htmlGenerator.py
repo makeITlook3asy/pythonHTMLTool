@@ -2,20 +2,19 @@ from typing import Union
 class HTML_File():
     def __init__(self,filename:str):
         self.filename = filename
-        self.out_file = open(self.filename + ".html",'w')
         self.body_string = ""
 
-    def add_p_element(self,content:str,color:str = "#FF0000"):
+    def add_p_element(self,content:str,color:str = "#000000"):
         self.body_string += f'{HTML_Elements.p_element(content,color)}'
 
-    def add_b_element(self,content:str,color:str):
+    def add_b_element(self,content:str,color:str ="#000000"):
         self.body_string += f'{HTML_Elements.b_element(content,color)}'
 
     def add_hr_element(self):
         self.body_string += f'{HTML_Elements.hr_element()}'
 
-    def add_h_element(self,element):
-        self.body_string += f'{HTML_Elements.h_element(element)}'
+    def add_h_element(self,element:str,heading_type:str="h2"):
+        self.body_string += f'{HTML_Elements.h_element(element,heading_type)}'
 
     def add_div_open_element(self):
         self.body_string += f'{HTML_Elements.div_element_open()}'
@@ -46,7 +45,7 @@ class Table():
         self.heading = heading
         self.content = f'<h3>{self.heading}</h3>\n<table style="table-layout: fixed; width: 100%;border-collapse: collapse; border: 3px solid black;page-break-inside: avoid;">'
 
-    def addRow(self,columns:int,text:list,is_bold = False,images_at_index:list = [],width:str="100%",height:str="100%",color:str="#FF0000"):
+    def addRow(self,columns:int,text:list,is_bold = False,images_at_index:list = [],width:str="100%",height:str="100%",color:str="#000000"):
         self.content += "<tr>\n"
         for i in range(columns):
             if len(images_at_index) > 0 and i in images_at_index:
@@ -70,7 +69,7 @@ class HTML_Elements():
     br_element = "<br>"
 
     @staticmethod
-    def p_element(content:str,color:str="#FF0000"):
+    def p_element(content:str,color:str="#000000"):
         return f'<p style="color: {color};">{content}</p>\n'
       
     @staticmethod
@@ -110,7 +109,7 @@ class HTML_Elements():
         return f'<body>\n{content}</body>\n'
     
     @staticmethod
-    def td_element(content:str, is_bold:bool = False,color:str="#FF0000"):
+    def td_element(content:str, is_bold:bool = False,color:str="#000000"):
         font_weight = "normal" if not is_bold else "bold"
         return f'<td style="border: 3px solid black;text-align: center;color: {color}; font-weight: {font_weight}">{content}</td>\n'
     
@@ -119,8 +118,7 @@ class HTML_Elements():
         return f'<td align="center"; style="border: 3px solid black;"><img src="{img}" height={height} width={width}></img></td>'
     
     @staticmethod
-    def th_element(content:str,is_bold:bool=False,color:str="#FF0000"):
-        font_weight = "normal" if not is_bold else "bold"
+    def th_element(content:str,font_weight:str = "bold",color:str="#000000"):
         return f'<th style="border: 3px solid black;text-align: center;color: {color}; font-weight: {font_weight}">{content}</th>\n'
     
     @staticmethod
@@ -132,3 +130,8 @@ class HTML_Elements():
         return img_str
     
 
+"""
+Tabelle: zB 4 Spalten dann 8: muss sich besser aufteilen
+speichern mit und ohne .html muss möglich sein
+mehr css Gestaltungsmöglichkeiten: hintergrundfarbe, widht, lenght ...
+"""
