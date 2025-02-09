@@ -1,23 +1,23 @@
 from typing import Union
 class HTML_File():
     def __init__(self,filename:str):
-        self.filename = filename
+        self.filename = filename if ".html" in filename else filename + ".html"
         self.body_string = ""
 
-    def add_p_element(self,content:str,color:str = "#000000"):
-        self.body_string += f'{HTML_Elements.p_element(content,color)}'
+    def add_p_element(self,content:str,style_attribs:list=[]):
+        self.body_string += f'{HTML_Elements.p_element(content,style_attribs)}'
 
-    def add_b_element(self,content:str,color:str ="#000000"):
-        self.body_string += f'{HTML_Elements.b_element(content,color)}'
+    def add_b_element(self,content:str,style_attribs:list=[]):
+        self.body_string += f'{HTML_Elements.b_element(content,style_attribs)}'
 
     def add_hr_element(self):
         self.body_string += f'{HTML_Elements.hr_element()}'
 
-    def add_h_element(self,element:str,heading_type:str="h2"):
-        self.body_string += f'{HTML_Elements.h_element(element,heading_type)}'
+    def add_h_element(self,element:str,heading_type:str="h2",style_attribs:list=[]):
+        self.body_string += f'{HTML_Elements.h_element(element,heading_type,style_attribs)}'
 
-    def add_div_open_element(self):
-        self.body_string += f'{HTML_Elements.div_element_open()}'
+    def add_div_open_element(self,style_attribs:list=[]):
+        self.body_string += f'{HTML_Elements.div_element_open(style_attribs)}'
 
     def add_div_close_element(self):
         self.body_string += f'{HTML_Elements.div_element_close()}'
@@ -35,7 +35,7 @@ class HTML_File():
         self.body_string += HTML_Elements.img_element(image,width,height,link)
 
     def create_file(self,titlename:str):
-        self.out_file = open(self.filename + ".html",'w')
+        self.out_file = open(self.filename,'w')
         self.out_file.write(f'<html>\n{HTML_Elements.head_element(titlename)}{HTML_Elements.body_element(self.body_string)}</html>')
         self.out_file.close()
 
@@ -69,24 +69,28 @@ class HTML_Elements():
     br_element = "<br>"
 
     @staticmethod
-    def p_element(content:str,color:str="#000000"):
-        return f'<p style="color: {color};">{content}</p>\n'
+    def p_element(content:str,style_attribs:list=[]):
+        styles = ' style="' + ";".join(style_attribs) + ';"' if len(style_attribs) > 0 else ""
+        return f'<p{styles}>{content}</p>\n'
       
     @staticmethod
     def hr_element():
         return f'<hr>\n'
 
     @staticmethod
-    def b_element(content:str,color:str):
-        return f'<b style="color: {color};">{content}</b>\n'
+    def b_element(content:str,style_attribs):
+        styles = ' style="' + ";".join(style_attribs) + ';"' if len(style_attribs) > 0 else ""
+        return f'<b{styles}>{content}</b>\n'
 
     @staticmethod
-    def h_element(content:str,heading_type:str="h2"):
-        return f'<{heading_type}>{content}</{heading_type}>\n'
+    def h_element(content:str,heading_type:str="h2",style_attribs:list=[]):
+        styles = ' style="' + ";".join(style_attribs) + ';"' if len(style_attribs) > 0 else ""
+        return f'<{heading_type}{styles}>{content}</{heading_type}>\n'
 
     @staticmethod
-    def div_element_open():
-        return '<div style="page-break-inside: avoid;">'
+    def div_element_open(style_attribs:list=[]):
+        styles = ' style="' + ";".join(style_attribs) + ';"' if len(style_attribs) > 0 else ""
+        return f'<div{styles}>'
 
     @staticmethod
     def div_element_close():
@@ -133,5 +137,8 @@ class HTML_Elements():
 """
 Tabelle: zB 4 Spalten dann 8: muss sich besser aufteilen
 speichern mit und ohne .html muss möglich sein
-mehr css Gestaltungsmöglichkeiten: hintergrundfarbe, widht, lenght ...
+mehr css Gestaltungsmöglichkeiten: hintergrundfarbe, widht, lenght:
+    1) beliebige style Attribute können über eine Liste übergeben werden
+    2) bestimmte Style Attribute gelten global
+    3) Möglichkeit css file zu generieren?
 """
