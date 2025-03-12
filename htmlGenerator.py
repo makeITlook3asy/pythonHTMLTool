@@ -41,22 +41,30 @@ class HTML_File():
 
 
 class Table():
-    def __init__(self,heading:str = ""):
+    def __init__(self,columns:int,heading:str = ""):
+        self.cols = columns
         self.heading = heading
         self.content = f'<h3>{self.heading}</h3>\n<table style="table-layout: fixed; width: 100%;border-collapse: collapse; border: 3px solid black;page-break-inside: avoid;">'
 
-    def addRow(self,columns:int,text:list,is_bold = False,images_at_index:list = [],width:str="100%",height:str="100%",color:str="#000000"):
+    def addRow(self,text:list,is_bold = False,images_at_index:dict = {},width:str="100%",height:str="100%",color:str="#000000"):
         self.content += "<tr>\n"
-        for i in range(columns):
-            if len(images_at_index) > 0 and i in images_at_index:
-                self.content += f'{HTML_Elements.td_img_elment(text[i],width,height)}'
+        addImg = False
+        for i in range(self.cols):
+            if len(images_at_index):
+                for key,img in images_at_index.items():
+                    if i == key:
+                        addImg = True
+                        img_src = img
+            if addImg:
+                self.content += f'{HTML_Elements.td_img_elment(img_src,width,height)}'
+                addImg = False
             else:
                 self.content += f'{HTML_Elements.td_element(text[i],is_bold,color)}'
         self.content += "</tr>\n"
 
-    def addHeaderRow(self,columns:int,text:list):
+    def addHeaderRow(self,text:list):
         self.content += "<tr>\n"
-        for i in range(columns):
+        for i in range(self.cols):
             self.content += f'{HTML_Elements.th_element(text[i])}'
         self.content += "</tr>\n"
 
@@ -78,7 +86,7 @@ class HTML_Elements():
         return f'<hr>\n'
 
     @staticmethod
-    def b_element(content:str,style_attribs):
+    def b_element(content:str,style_attribs:list=[]):
         styles = ' style="' + ";".join(style_attribs) + ';"' if len(style_attribs) > 0 else ""
         return f'<b{styles}>{content}</b>\n'
 
@@ -135,10 +143,9 @@ class HTML_Elements():
     
 
 """
-Tabelle: zB 4 Spalten dann 8: muss sich besser aufteilen
-speichern mit und ohne .html muss möglich sein
 mehr css Gestaltungsmöglichkeiten: hintergrundfarbe, widht, lenght:
     1) beliebige style Attribute können über eine Liste übergeben werden
     2) bestimmte Style Attribute gelten global
     3) Möglichkeit css file zu generieren?
+in Tabelle, wenn man Bild einfügt soll es auch möglich sein, darüber Text einzufügen
 """
