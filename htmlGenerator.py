@@ -50,13 +50,12 @@ class Table():
         self.content += "<tr>\n"
         addImg = False
         for i in range(self.cols):
-            if len(images_at_index):
-                for key,img in images_at_index.items():
-                    if i == key:
-                        addImg = True
-                        img_src = img
+            for key,img in images_at_index.items():
+                if i == key:
+                    addImg = True
+                    img_src = img
             if addImg:
-                self.content += f'{HTML_Elements.td_img_elment(img_src,width,height)}'
+                self.content += f'{HTML_Elements.td_img_elment(img_src,width,height,text[i])}'
                 addImg = False
             else:
                 self.content += f'{HTML_Elements.td_element(text[i],is_bold,color)}'
@@ -126,9 +125,12 @@ class HTML_Elements():
         return f'<td style="border: 3px solid black;text-align: center;color: {color}; font-weight: {font_weight}">{content}</td>\n'
     
     @staticmethod
-    def td_img_elment(img:str,width:str,height:str):
-        return f'<td align="center"; style="border: 3px solid black;"><img src="{img}" height={height} width={width}></img></td>'
-    
+    def td_img_elment(img:str,width:str,height:str,text:str):
+        if text == "":
+            return_str = f'<td align="center"; style="border: 3px solid black;"><img src="{img}" height={height} width={width}></img></td>'
+        else:
+            return_str = f'<td align="center"; style="border: 3px solid black;"><div><p>{text}</p><img src="{img}" height={height} width={width}></img></div></td>'
+        return return_str
     @staticmethod
     def th_element(content:str,font_weight:str = "bold",color:str="#000000"):
         return f'<th style="border: 3px solid black;text-align: center;color: {color}; font-weight: {font_weight}">{content}</th>\n'
