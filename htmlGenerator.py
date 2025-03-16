@@ -143,11 +143,3 @@ class HTML_Elements():
             img_str = f'<img src="{img}" width="{width}" height="{height}">\n'
         return img_str
     
-
-"""
-mehr css Gestaltungsmöglichkeiten: hintergrundfarbe, widht, lenght:
-    1) beliebige style Attribute können über eine Liste übergeben werden
-    2) bestimmte Style Attribute gelten global
-    3) Möglichkeit css file zu generieren?
-in Tabelle, wenn man Bild einfügt soll es auch möglich sein, darüber Text einzufügen
-"""
